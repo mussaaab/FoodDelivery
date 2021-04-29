@@ -271,7 +271,6 @@ class Categories extends Component {
   };
 
   render() {
-    console.warn(this.props.FoodItem);
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <Header
