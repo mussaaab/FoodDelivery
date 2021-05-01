@@ -15,6 +15,7 @@ import { Images, Colors } from "../Config";
 import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { connect } from "react-redux";
+import { FoodCategories } from "../Components/FoodCategoriesFeed";
 
 const { height, width } = Dimensions.get("window");
 
@@ -104,8 +105,7 @@ class Categories extends Component {
     );
   };
 
-  AddToCart = (item, index) => {
-    this.props.AddToCart([...this.props.FoodItem, item]);
+  addToCart = (item, index) => {
     // AsyncStorage.setItem("item", JSON.stringify(item));
     if (!item.cartStatus) {
       let updateItem = [...this.state.foodItemCategories];
@@ -114,6 +114,7 @@ class Categories extends Component {
       this.setState({
         foodItemCategories: updateItem,
       });
+      this.props.AddToCart([...this.props.FoodItem, cartUpdate])
     }
   };
 
@@ -138,139 +139,12 @@ class Categories extends Component {
 
   renderfoodItemCategories = ({ item, index }) => {
     return (
-      <View style={{ width: width * 0.9, alignSelf: "center" }}>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("FoodDetail", { item })}
-          style={{
-            flex: 1,
-            marginVertical: 20,
-            alignSelf: "center",
-            borderRadius: 10,
-            elevation: 2,
-          }}
-        >
-          <View
-            style={{
-              borderRadius: 10,
-              flex: 1,
-              justifyContent: "flex-end",
-              overflow: "hidden",
-            }}
-          >
-            <Image
-              source={item.image}
-              style={{
-                width: width * 0.9,
-                height: height * 0.25,
-                resizeMode: "cover",
-                overflow: "hidden",
-              }}
-            />
-
-            <View
-              style={{
-                position: "absolute",
-                backgroundColor: "#fff",
-                borderTopRightRadius: 10,
-              }}
-            >
-              <Text
-                style={{
-                  paddingVertical: 15,
-                  paddingHorizontal: 20,
-                  fontWeight: "bold",
-                }}
-              >
-                {item.time} min
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignSelf: "center",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Text style={{ fontSize: 22 }}>{item.title}</Text>
-          {!item.cartStatus ? (
-            <TouchableOpacity onPress={() => this.AddToCart(item, index)}>
-              <Text
-                style={{
-                  color: Colors.Primary,
-                  fontSize: 12,
-                  fontWeight: "bold",
-                }}
-              >
-                Add to cart
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={() => this.removeFromCart(item, index)}>
-              <Text
-                style={{
-                  color: Colors.Primary,
-                  fontSize: 12,
-                  fontWeight: "bold",
-                }}
-              >
-                Remove
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            height: 30,
-          }}
-        >
-          <Image
-            source={Images.star}
-            style={{
-              width: 17,
-              height: 17,
-              resizeMode: "contain",
-              tintColor: Colors.Primary,
-            }}
-          />
-          <Text style={{ paddingHorizontal: 8, fontSize: 16 }}>
-            {item.rating}
-          </Text>
-          <Text style={{ paddingHorizontal: 6, fontSize: 16 }}>
-            {item.name}
-          </Text>
-
-          <View
-            style={{
-              width: 10,
-              height: 30,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={{
-                width: 3,
-                height: 3,
-                borderRadius: 100,
-                backgroundColor: Colors.Secondary,
-                marginTop: 5,
-              }}
-            />
-          </View>
-        </View>
-      </View>
+      <FoodCategories AddToCart={(item, index) => this.addToCart(item, index)} navigation={this.props.navigation} removeFromCart={(item, index) => this.removeFromCart(item, index)} item={item} index={index} />
     );
   };
 
   render() {
+    // console.warn(this.props.FoodItem[0].cartStatus);
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <Header
@@ -279,16 +153,6 @@ class Categories extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Cart")}
             >
-              <View
-                style={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: "red",
-                  borderRadius: 50,
-                }}
-              >
-                <Text> {this.props.FoodItem.length}</Text>
-              </View>
               <FontAwesome name="shopping-basket" size={20} />
             </TouchableOpacity>
           )}
