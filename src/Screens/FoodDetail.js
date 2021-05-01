@@ -14,14 +14,13 @@ class FoodDetail extends Component {
 
   render() {
     let {item} = this.props.route.params;
-
-    console.warn('dasda', item);
+    
     return (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
         <Header
           leftIcon={() => (
             <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-              <AntDesign name="arrowleft" size={22} color="#000" />
+              <AntDesign name="arrowleft" size={24} color="#000" />
             </TouchableOpacity>
           )}
           rigthIcon={() => (
